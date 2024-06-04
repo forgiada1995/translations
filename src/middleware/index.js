@@ -34,7 +34,7 @@ Middleware.post.translate = async (req, res) => {
                     }
                 })
             }
-            return res.status(400).send({success: false, tranlations: [], error: {status: error.response.status, message:error.message}});
+            return res.status(400).send(resp);
         }
         return res.json({success: false});
       } catch (error) {
