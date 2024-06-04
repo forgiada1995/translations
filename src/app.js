@@ -7,8 +7,6 @@ const router = express.Router();
 const { Middleware } = require('./middleware/index');
 const PORT = process.env.PORT || 3000;
 
-console.log(Middleware)
-
 // Middleware for parsing JSON bodies
 app.use(express.json());
 

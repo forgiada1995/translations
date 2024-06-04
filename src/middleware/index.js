@@ -14,30 +14,33 @@ Middleware.post.translate = async (req, res) => {
     const URL = `https://translation.googleapis.com/language/translate/v2`;
     const APIKEY = process.env.APIKEY;
     params = {
-        q:text,
-        source, 
+        q:text, 
+        source,  
         target, 
-        format:'text', key: APIKEY
+        format:'text', 
+        key: APIKEY
     }
     
     try {
         const response = await axios.post(URL, null, { params })
-        console.log(response.data, Object.keys(response.data.data))
         
-        const resp = {
-            success: true,
-            tranlations: response.data.data.translations.map(t => {
-                return {
-                    lang: source ? source : t.detectedSourceLanguage,
-                    translatedText: t.translatedText
-                }
-            })
+        if(response.status === 200){
+            const resp = {
+                success: true,
+                tranlations: response.data.data.translations.map(t => {
+                    return {
+                        lang: source ? source : t.detectedSourceLanguage,
+                        translatedText: t.translatedText
+                    }
+                })
+            }
+            return res.status(400).send({success: false, tranlations: [], error: {status: error.response.status, message:error.message}});
         }
-        
-        return res.json(resp);
+        return res.json({success: false});
       } catch (error) {
         console.log(error)
-        return res.status(400).send(error);
+
+        return res.status(400).send({success: false, tranlations: [], error: {status: error.response.status, message:error.message}});
       }
 
 }
