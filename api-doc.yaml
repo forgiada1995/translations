@@ -6,6 +6,22 @@ info:
 servers:
   - url: http://localhost:3000
 paths:
+  /:
+    get:
+      summary: Test endpoint
+      description: test endpoint
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+
   /translate:
     post:
       summary: Translate text
@@ -15,18 +31,21 @@ paths:
           name: text
           schema:
             type: string
+            example: testo da tradurre
           required: true
           description: The text to translate
         - in: query
           name: source
           schema:
             type: string
-          required: true
+            example: it
+          required: false
           description: The source language code (e.g., en, es, fr)
         - in: query
           name: target
           schema:
             type: string
+            example: en
           required: true
           description: The target language code (e.g., en, es, fr)
       responses:
@@ -37,9 +56,24 @@ paths:
               schema:
                 type: object
                 properties:
-                  translatedText:
-                    type: string
+                  success: 
+                    type: boolean
+                    example: true
+                    description: always true is success
+                  translations:
+                    type: array
                     description: The translated text
+                    items:
+                      type: object
+                      properties:
+                        lang:
+                          type: string
+                          description: The language code of the translation
+                          example: en
+                        translatedText:
+                          type: string
+                          description: The translated text
+                          example: HI
         '400':
           description: Bad request
           content:
@@ -50,13 +84,4 @@ paths:
                   error:
                     type: string
                     description: Error message
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: Error message
+

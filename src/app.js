@@ -1,20 +1,22 @@
-// app.js
+// // app.js
+
+console.log('Starting the application...');
+
 require('dotenv').config();
 const express = require('express');
-const path = require('path');
 const app = express();
-const router = express.Router();
+const routes = require('./routes/index'); 
 const { Middleware } = require('./middleware/index');
 const PORT = process.env.PORT || 3000;
 
-// Middleware for parsing JSON bodies
+// middlewares
 app.use(express.json());
+app.post('/translate', Middleware.post.translate);
 
-// Route for translation
-app.post('/translate', Middleware.post.translate); // Using Middleware.post.translate as middleware
-
+// routes
+app.use('/', routes);
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`); 
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
